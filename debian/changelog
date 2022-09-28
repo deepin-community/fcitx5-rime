@@ -1,0 +1,120 @@
+fcitx5-rime (5.0.12-1) UNRELEASED; urgency=medium
+
+  * update
+
+ -- Debian Input Method Team <debian-input-method@lists.debian.org>  Sun, 24 Apr 2022 17:59:35 +0800
+
+fcitx5-rime (5.0.12-1) unstable; urgency=medium
+
+  * New upstream release. 
+
+ -- Boyuan Yang <byang@debian.org>  Wed, 16 Mar 2022 11:40:32 -0400
+
+fcitx5-rime (5.0.11-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Boyuan Yang <byang@debian.org>  Wed, 02 Feb 2022 12:14:29 -0500
+
+fcitx5-rime (5.0.10-1) unstable; urgency=medium
+
+  * New upstream release. 
+
+ -- Boyuan Yang <byang@debian.org>  Sat, 08 Jan 2022 11:11:37 -0500
+
+fcitx5-rime (5.0.9-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Boyuan Yang <byang@debian.org>  Wed, 15 Dec 2021 14:53:29 -0500
+
+fcitx5-rime (5.0.8-1) unstable; urgency=medium
+
+  * New upstream release.
+  * debian/control: Mark binary package to conflict with fcitx-rime.
+  * debian/rules: Install non-Flatpak icons.
+
+ -- Boyuan Yang <byang@debian.org>  Tue, 23 Nov 2021 16:13:28 -0500
+
+fcitx5-rime (5.0.7-1) unstable; urgency=medium
+
+  * Team upload.
+  * New upstream release.
+
+ -- Shengjing Zhu <zhsj@debian.org>  Fri, 01 Oct 2021 03:13:33 +0800
+
+fcitx5-rime (5.0.6-1) unstable; urgency=medium
+
+  * Team upload.
+  * New upstream release.
+  * Update Standards-Version to 4.6.0 (no changes)
+
+ -- Shengjing Zhu <zhsj@debian.org>  Wed, 25 Aug 2021 13:22:35 +0800
+
+fcitx5-rime (5.0.4-1) unstable; urgency=medium
+
+  * Team upload.
+  * New upstream release.
+
+ -- Shengjing Zhu <zhsj@debian.org>  Fri, 19 Feb 2021 22:32:06 +0800
+
+fcitx5-rime (5.0.3-1) unstable; urgency=medium
+
+  * New upstream release.
+  * debian/control: Force build with librime 1.6+.
+
+ -- Boyuan Yang <byang@debian.org>  Tue, 12 Jan 2021 12:12:14 -0500
+
+fcitx5-rime (5.0.2-1) unstable; urgency=medium
+
+  * Team upload.
+  * New upstream release
+  * Bump Standards-Version to 4.5.1 (no changes)
+
+ -- Shengjing Zhu <zhsj@debian.org>  Sat, 12 Dec 2020 21:52:13 +0800
+
+fcitx5-rime (5.0.1-2) unstable; urgency=medium
+
+  * Team upload.
+  * Exclude icons that are clashed with fcitx-rime
+
+ -- Shengjing Zhu <zhsj@debian.org>  Sat, 05 Dec 2020 22:55:03 +0800
+
+fcitx5-rime (5.0.1-1) unstable; urgency=medium
+
+  * Team upload.
+  * New upstream release
+  * Only install icons with org.fcitx.Fcitx5 prefix
+  * Bump fcitx5 to 5.0.2
+
+ -- Shengjing Zhu <zhsj@debian.org>  Sat, 05 Dec 2020 22:22:56 +0800
+
+fcitx5-rime (5.0.0-1) unstable; urgency=medium
+
+  * Team upload.
+  * New upstream release
+  * Bump fcitx5 to 5.0.1
+  * Add appstream metainfo
+
+ -- Shengjing Zhu <zhsj@debian.org>  Sat, 07 Nov 2020 01:44:15 +0800
+
+fcitx5-rime (0.0~git20200913.e20996d-2) unstable; urgency=high
+
+  * Team upload.
+  * Add patch to rename icon with fcitx5 prefix (Closes: #973618)
+
+ -- Shengjing Zhu <zhsj@debian.org>  Tue, 03 Nov 2020 00:41:00 +0800
+
+fcitx5-rime (0.0~git20200913.e20996d-1) unstable; urgency=medium
+
+  * Team upload.
+  * New upstream snapshot
+  * Bump fcitx5 to 0.0~git20201030
+
+ -- Shengjing Zhu <zhsj@debian.org>  Sun, 01 Nov 2020 02:50:22 +0800
+
+fcitx5-rime (0.0~git20200615.e4fc600-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- Boyuan Yang <byang@debian.org>  Sat, 04 Jul 2020 06:53:39 -0400
