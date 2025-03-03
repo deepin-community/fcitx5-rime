@@ -8,6 +8,7 @@
 
 #include "rimeengine.h"
 #include "rimestate.h"
+#include <fcitx/candidateaction.h>
 #include <fcitx/candidatelist.h>
 #include <limits>
 #include <memory>
@@ -21,6 +22,7 @@ public:
                       KeySym sym, int idx);
 
     void select(InputContext *inputContext) const override;
+    void forget(RimeState *state) const;
 
 private:
     RimeEngine *engine_;
@@ -35,6 +37,7 @@ public:
                             int idx);
 
     void select(InputContext *inputContext) const override;
+    void forget(RimeState *state) const;
 
 private:
     RimeEngine *engine_;
@@ -43,10 +46,15 @@ private:
 #endif
 
 class RimeCandidateList final : public CandidateList,
+                                public ActionableCandidateList,
                                 public PageableCandidateList
 #ifndef FCITX_RIME_NO_SELECT_CANDIDATE
     ,
                                 public BulkCandidateList
+#endif
+#ifndef FCITX_RIME_NO_HIGHLIGHT_CANDIDATE
+    ,
+                                public BulkCursorCandidateList
 #endif
 {
 public:
@@ -89,6 +97,16 @@ public:
     const CandidateWord &candidateFromAll(int idx) const override;
     int totalSize() const override;
 #endif
+
+#ifndef FCITX_RIME_NO_HIGHLIGHT_CANDIDATE
+    int globalCursorIndex() const override;
+    void setGlobalCursorIndex(int index) override;
+#endif
+
+    bool hasAction(const CandidateWord &candidate) const override;
+    std::vector<CandidateAction>
+    candidateActions(const CandidateWord &candidate) const override;
+    void triggerAction(const CandidateWord &candidate, int id) override;
 
 private:
     void checkIndex(int idx) const {

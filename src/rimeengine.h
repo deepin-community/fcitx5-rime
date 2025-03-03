@@ -10,25 +10,38 @@
 #include "rimestate.h"
 #include <cstdint>
 #include <fcitx-config/configuration.h>
+#include <fcitx-config/enum.h>
 #include <fcitx-config/iniparser.h>
+#include <fcitx-config/option.h>
+#include <fcitx-config/rawconfig.h>
 #include <fcitx-utils/event.h>
 #include <fcitx-utils/eventdispatcher.h>
 #include <fcitx-utils/handlertable_details.h>
 #include <fcitx-utils/i18n.h>
 #include <fcitx-utils/library.h>
 #include <fcitx-utils/log.h>
+#include <fcitx-utils/misc.h>
+#include <fcitx-utils/standardpath.h>
+#include <fcitx-utils/stringutils.h>
 #include <fcitx/action.h>
 #include <fcitx/addonfactory.h>
+#include <fcitx/addoninstance.h>
 #include <fcitx/addonmanager.h>
+#include <fcitx/event.h>
 #include <fcitx/icontheme.h>
+#include <fcitx/inputcontextmanager.h>
 #include <fcitx/inputcontextproperty.h>
 #include <fcitx/inputmethodengine.h>
 #include <fcitx/instance.h>
 #include <fcitx/menu.h>
+#include <list>
 #include <memory>
 #include <rime_api.h>
 #include <string>
+#include <string_view>
+#include <thread>
 #include <unordered_map>
+#include <unordered_set>
 
 #ifndef FCITX_RIME_NO_DBUS
 #include "rimeservice.h"
@@ -37,6 +50,7 @@
 namespace fcitx {
 
 class RimeState;
+class RimeOptionAction;
 
 enum class SharedStatePolicy { FollowGlobalConfig, All, Program, No };
 
@@ -48,6 +62,18 @@ enum class PreeditMode { No, ComposingText, CommitPreview };
 
 FCITX_CONFIG_ENUM_NAME_WITH_I18N(PreeditMode, N_("Do not show"),
                                  N_("Composing text"), N_("Commit preview"))
+
+enum class SwitchInputMethodBehavior {
+    Clear,
+    CommitRawInput,
+    CommitComposingText,
+    CommitCommitPreview
+};
+
+FCITX_CONFIG_ENUM_NAME_WITH_I18N(SwitchInputMethodBehavior, N_("Clear"),
+                                 N_("Commit raw input"),
+                                 N_("Commit composing text"),
+                                 N_("Commit commit preview"))
 
 FCITX_CONFIGURATION(
     RimeEngineConfig,
@@ -64,9 +90,12 @@ FCITX_CONFIGURATION(
         this, "PreeditCursorPositionAtBeginning",
         _("Fix embedded preedit cursor at the beginning of the preedit"),
         !isAndroid() && !isApple()};
-    Option<bool> commitWhenDeactivate{
-        this, "Commit when deactivate",
-        _("Commit current text when deactivating"), true};
+    OptionWithAnnotation<SwitchInputMethodBehavior,
+                         SwitchInputMethodBehaviorI18NAnnotation>
+        switchInputMethodBehavior{
+            this, "SwitchInputMethodBehavior",
+            _("Action when switching input method"),
+            SwitchInputMethodBehavior::CommitCommitPreview};
     ExternalOption userDataDir{
         this, "UserDataDir", _("User data dir"),
         stringutils::concat(
@@ -86,13 +115,12 @@ FCITX_CONFIGURATION(
     Option<std::vector<std::string>> modules{this, "Modules", _("Modules"),
                                              std::vector<std::string>()};
 #endif
-);
-
-class RimeOptionAction : public Action {
-public:
-    // This is used to save the option when we need to release the session.
-    virtual std::optional<std::string> snapshotOption(InputContext *ic) = 0;
-};
+    fcitx::Option<fcitx::KeyList> deploy{
+        this, "Deploy", _("Deploy"),
+        isApple() ? fcitx::KeyList{fcitx::Key("Control+Alt+grave")}
+                  : fcitx::KeyList{}};
+    fcitx::Option<fcitx::KeyList> synchronize{
+        this, "Synchronize", _("Synchronize"), {}};);
 
 class RimeEngine final : public InputMethodEngineV2 {
 public:
@@ -153,6 +181,8 @@ private:
     void sync();
     void updateSchemaMenu();
     void updateActionsForSchema(const std::string &schema);
+    void notifyImmediately(RimeSessionId session, std::string_view type,
+                           std::string_view value);
     void notify(RimeSessionId session, const std::string &type,
                 const std::string &value);
     void releaseAllSession(bool snapshot = false);
@@ -201,6 +231,8 @@ private:
     RimeService service_{this};
 #endif
     RimeSessionPool sessionPool_;
+    std::thread::id mainThreadId_ = std::this_thread::get_id();
+    RimeState *currentKeyEventState_ = nullptr;
 };
 
 class RimeEngineFactory : public AddonFactory {

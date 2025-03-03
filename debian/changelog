@@ -1,3 +1,16 @@
+fcitx5-rime (5.1.9-2) unstable; urgency=medium
+
+  * New upstream release.
+  * Force rebuild with librime 1.12.
+
+ -- Boyuan Yang <byang@debian.org>  Wed, 13 Nov 2024 23:08:08 -0500
+
+fcitx5-rime (5.1.9-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Boyuan Yang <byang@debian.org>  Sun, 13 Oct 2024 18:45:03 -0400
+
 fcitx5-rime (5.1.8-2) unstable; urgency=medium
 
   * Force rebuild against librime 1.11.2.
