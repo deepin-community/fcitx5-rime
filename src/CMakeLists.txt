@@ -4,6 +4,7 @@ set(RIME_SOURCES
     rimecandidate.cpp
     rimesession.cpp
     rimeaction.cpp
+    rimefactory.cpp
 )
 
 set(RIME_LINK_LIBRARIES
@@ -22,7 +23,7 @@ else()
     add_definitions(-DFCITX_RIME_NO_DBUS)
 endif()
 
-add_library(rime MODULE ${RIME_SOURCES})
+add_fcitx5_addon(rime ${RIME_SOURCES})
 target_link_libraries(rime ${RIME_LINK_LIBRARIES})
 install(TARGETS rime DESTINATION "${CMAKE_INSTALL_LIBDIR}/fcitx5")
 fcitx5_translate_desktop_file(rime.conf.in rime.conf)
