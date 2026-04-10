@@ -24,7 +24,6 @@
 #include <fcitx-utils/standardpath.h>
 #include <fcitx-utils/stringutils.h>
 #include <fcitx/action.h>
-#include <fcitx/addonfactory.h>
 #include <fcitx/addoninstance.h>
 #include <fcitx/addonmanager.h>
 #include <fcitx/event.h>
@@ -47,7 +46,7 @@
 #include "rimeservice.h"
 #endif
 
-namespace fcitx {
+namespace fcitx::rime {
 
 class RimeState;
 class RimeOptionAction;
@@ -89,7 +88,7 @@ FCITX_CONFIGURATION(
     Option<bool> preeditCursorPositionAtBeginning{
         this, "PreeditCursorPositionAtBeginning",
         _("Fix embedded preedit cursor at the beginning of the preedit"),
-        !isAndroid() && !isApple()};
+        !isAndroid() && !isApple() && !isEmscripten()};
     OptionWithAnnotation<SwitchInputMethodBehavior,
                          SwitchInputMethodBehaviorI18NAnnotation>
         switchInputMethodBehavior{
@@ -234,19 +233,11 @@ private:
     std::thread::id mainThreadId_ = std::this_thread::get_id();
     RimeState *currentKeyEventState_ = nullptr;
 };
+} // namespace fcitx::rime
 
-class RimeEngineFactory : public AddonFactory {
-public:
-    AddonInstance *create(AddonManager *manager) override {
-        registerDomain("fcitx5-rime", FCITX_INSTALL_LOCALEDIR);
-        return new RimeEngine(manager->instance());
-    }
-};
-} // namespace fcitx
+FCITX_DECLARE_LOG_CATEGORY(rime_log);
 
-FCITX_DECLARE_LOG_CATEGORY(rime);
-
-#define RIME_DEBUG() FCITX_LOGC(rime, Debug)
-#define RIME_ERROR() FCITX_LOGC(rime, Error)
+#define RIME_DEBUG() FCITX_LOGC(rime_log, Debug)
+#define RIME_ERROR() FCITX_LOGC(rime_log, Error)
 
 #endif // _FCITX_RIMEENGINE_H_
