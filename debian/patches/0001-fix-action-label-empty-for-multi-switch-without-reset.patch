@@ -1,0 +1,20 @@
+--- a/src/rimeaction.cpp
++++ b/src/rimeaction.cpp
+@@ -124,7 +124,7 @@
+ std::string SelectAction::shortText(InputContext *ic) const {
+     auto *state = engine_->state(ic);
+     auto *api = engine_->api();
+-    if (!state) {
++    if (!state || texts_.empty()) {
+         return "";
+     }
+     auto session = state->session();
+@@ -133,7 +133,7 @@
+             return texts_[i];
+         }
+     }
+-    return "";
++    return texts_[0];
+ }
+ 
+ std::optional<std::string> SelectAction::snapshotOption(InputContext *ic) {

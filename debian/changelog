@@ -1,3 +1,9 @@
+fcitx5-rime (5.1.10-2deepin1) unstable; urgency=medium
+
+  * fix action label empty for multi switch without reset.
+
+ -- lhdjply <lhdjply@126.com>  Fri, 10 Apr 2026 16:07:14 +0800
+
 fcitx5-rime (5.1.10-2) unstable; urgency=medium
 
   * Force rebuild with librime 1.13.1.
